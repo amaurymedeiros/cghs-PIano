@@ -37,11 +37,6 @@ root.grab_pointer(True, X.ButtonPressMask, X.GrabModeAsync, X.GrabModeAsync, 0,
                     0, X.CurrentTime)
 root.grab_keyboard(True, X.GrabModeAsync, X.GrabModeAsync, X.CurrentTime)
 
-
-# Reprodução de som
-p = pyaudio.PyAudio()
-stream = p.open(rate=44100, channels=1, format=pyaudio.paFloat32, output=True)
-
 while True:
     event = display.next_event()
     # Para evitar o erro de mudança de source (e.g. maKey maKey pra teclado)
@@ -60,14 +55,10 @@ while True:
     elif e in teclas_ref:
         if isinstance(event, KeyPress):
             print "Tecla " + teclas[teclas_ref.index(e)] + " pressionada."
-            stream.write(array.array('f',
-            ((teclas_ref.index(e) * 2) * math.sin(i / float(10.)) for i in range(44100))).tostring())
     # Setas
     elif e in setas_ref:
         if isinstance(event, KeyPress):
             print "Seta para " + setas[setas_ref.index(e)] + " pressionada."
     else:
         break
-        stream.close()
-        p.terminate()
         #continue
